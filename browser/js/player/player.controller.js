@@ -18,6 +18,7 @@ juke.controller('PlayerCtrl', function ($scope, $rootScope, PlayerFactory) {
   // state
   $scope.currentSong = PlayerFactory.getCurrentSong;
   $scope.playing = PlayerFactory.isPlaying;
+  $scope.getProgress = function () { return PlayerFactory.getProgress() * 100}
 
   // main toggle
   $scope.toggle = function (song) {
@@ -48,8 +49,8 @@ juke.controller('PlayerCtrl', function ($scope, $rootScope, PlayerFactory) {
   // }
 
   // outgoing events (to Album… or potentially other characters)
-  $scope.next = function () { PlayerFactory.pause(); PlayerFactory.next(); };
-  $scope.prev = function () { PlayerFactory.pause(); PlayerFactory.prev(); };
+  $scope.next = function () { PlayerFactory.pause(); PlayerFactory.next();};
+  $scope.prev = function () { PlayerFactory.pause(); PlayerFactory.prev();};
 
   function seek (decimal) {
     audio.currentTime = audio.duration * decimal;

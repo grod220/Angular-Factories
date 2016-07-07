@@ -13,4 +13,6 @@ juke.controller("AlbumsCtrl", function (AlbumFetcher, $scope) {
       })
       $scope.albums = albums;
     })
+
+    // $scope.view = SidebarFactory.showAlbums();
 })

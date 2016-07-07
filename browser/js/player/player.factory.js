@@ -1,6 +1,6 @@
 'use strict';
 
-juke.factory('PlayerFactory', function($http){
+juke.factory('PlayerFactory', function ($http, $rootScope) {
  var methods = {};
 
   var audio = document.createElement('audio');
@@ -41,18 +41,32 @@ juke.factory('PlayerFactory', function($http){
   };
 
   methods.next = function () {
-    var nextSong = currentSongList[currentSongList.indexOf(currentSong)+1];
+    var nextSong;
+    currentSongList.forEach(function (elem, i, array) {
+      if (elem.id === currentSong.id) {
+        nextSong = array[i + 1];
+      }
+    });
+
     if (!nextSong) {
       nextSong = currentSongList[0];
     }
+
     methods.start(nextSong, currentSongList);
   };
 
-  methods.previous = function () {
-    var prevSong = currentSongList[currentSongList.indexOf(currentSong)-1];
+  methods.prev = function () {
+    var prevSong;
+    currentSongList.forEach(function (elem, i, array) {
+      if (elem.id === currentSong.id) {
+        prevSong = array[i - 1];
+      }
+    });
+
     if (!prevSong) {
       prevSong = currentSongList[currentSongList.length-1];
     }
+
     methods.start(prevSong, currentSongList);
   };
 
@@ -66,6 +80,9 @@ juke.factory('PlayerFactory', function($http){
 
   audio.addEventListener('timeupdate', function () {
     progress = audio.currentTime / audio.duration;
+    if (methods.isPlaying) {
+      $rootScope.$digest();
+    }
   });
 
 

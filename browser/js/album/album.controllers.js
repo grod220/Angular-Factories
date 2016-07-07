@@ -26,8 +26,12 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, A
     var songList;
     AlbumFetcher.fetchById(song.albumId)
       .then(function (album) {
-        songList = album.songs
-        console.log(songList);
+        album.imageUrl = '/api/albums/' + album.id + '/image';
+        album.songs.forEach(function (song, i) {
+          song.audioUrl = '/api/songs/' + song.id + '/audio';
+          song.albumIndex = i;
+        });
+        songList = album.songs;
         if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {
           PlayerFactory.pause();
         } else if (song !== PlayerFactory.getCurrentSong()) {
@@ -41,6 +45,12 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, A
 
   $scope.playing = PlayerFactory.isPlaying;
   $scope.currentSong = PlayerFactory.getCurrentSong;
+
+  $scope.makeActive = function (loopedSong, currentSong) {
+    if (currentSong) {
+      return loopedSong.id === currentSong.id;
+    }
+  }
 
   // incoming events (from Player, toggle, or skip)
   // $scope.$on('pause', pause);
